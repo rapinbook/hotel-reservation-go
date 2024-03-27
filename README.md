@@ -69,3 +69,7 @@ Upon completion of this project, participants will have gained practical experie
 ## Note
 
 This project is intended for educational purposes and as a practical exercise to reinforce learning. It can be extended and customized based on individual requirements and preferences.
+
+
+
+CODE STRUCTURE FROM fulltimegodev
