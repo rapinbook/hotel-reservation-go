@@ -15,6 +15,7 @@ type UserStore interface {
 	InsertUser(context.Context, *types.User) (primitive.ObjectID, error)
 	GetUserByID(context.Context, primitive.ObjectID) (*types.User, error)
 	GetUsers(context.Context) ([]*types.User, error)
+	UpdateUser(context.Context) (primitive.ObjectID, error)
 }
 
 type MongoUserStore struct {
@@ -78,4 +79,16 @@ func (s *MongoUserStore) GetUserByID(c context.Context, objID primitive.ObjectID
 		log.Fatal(err)
 	}
 	return user, nil
+}
+
+func (s *MongoUserStore) UpdateUser(c context.Context, filter bson.M, update bson.M) error {
+	_, err := s.coll.UpdateOne(c, filter, update)
+	if err == mongo.ErrNoDocuments {
+		// Do something when no record was found
+		fmt.Println("record does not exist")
+	} else if err != nil {
+		log.Fatal(err)
+	}
+
+	return err
 }

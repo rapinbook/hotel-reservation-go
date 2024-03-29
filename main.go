@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/rapinbook/hotel-reservation-go/db"
+	"github.com/rapinbook/hotel-reservation-go/types"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -26,30 +28,30 @@ func main() {
 		log.Fatal(err)
 	}
 	mongoClient := db.NewMongoUserStore(client)
-	// _, err = mongoClient.InsertUser(ctx, &types.User{
-	// 	Email:     "John@foobar.com",
-	// 	FirstName: "John",
-	// 	LastName:  "Gunn",
-	// })
-	// if err != nil {
-	// 	log.Fatalf("Cannot inserted row to databases")
-	// }
-	// _, err = mongoClient.InsertUser(ctx, &types.User{
-	// 	Email:     "James@foobar.com",
-	// 	FirstName: "James",
-	// 	LastName:  "Gunn",
-	// })
-	// if err != nil {
-	// 	log.Fatalf("Cannot inserted row to databases")
-	// }
-	// _, err = mongoClient.InsertUser(ctx, &types.User{
-	// 	Email:     "Josh@foobar.com",
-	// 	FirstName: "Josh",
-	// 	LastName:  "Gunn",
-	// })
-	// if err != nil {
-	// 	log.Fatalf("Cannot inserted row to databases")
-	// }
+	_, err = mongoClient.InsertUser(ctx, &types.User{
+		Email:     "John@foobar.com",
+		FirstName: "John",
+		LastName:  "Gunn",
+	})
+	if err != nil {
+		log.Fatalf("Cannot inserted row to databases")
+	}
+	_, err = mongoClient.InsertUser(ctx, &types.User{
+		Email:     "James@foobar.com",
+		FirstName: "James",
+		LastName:  "Gunn",
+	})
+	if err != nil {
+		log.Fatalf("Cannot inserted row to databases")
+	}
+	_, err = mongoClient.InsertUser(ctx, &types.User{
+		Email:     "Josh@foobar.com",
+		FirstName: "Josh",
+		LastName:  "Gunn",
+	})
+	if err != nil {
+		log.Fatalf("Cannot inserted row to databases")
+	}
 	allUsers, err := mongoClient.GetUsers(ctx)
 	if err != nil {
 		fmt.Println(err)
@@ -66,7 +68,7 @@ func main() {
 		}
 	}
 	fmt.Println("Above show all rows in system")
-	objID, err := primitive.ObjectIDFromHex("6603dfdcff4c801f4a9e6599")
+	objID, err := primitive.ObjectIDFromHex("6604fb4ba5e4a0c79bba62f7")
 	if err != nil {
 		panic(err)
 	}
@@ -80,4 +82,11 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println("Above show row filter from obj")
+
+	update := bson.M{"$set": bson.M{"Email": "updated2@foobar.com"}}
+	err = mongoClient.UpdateUser(ctx, bson.M{"_id": objID}, update)
+	if err != nil {
+		fmt.Println(err)
+	}
+	// fmt.Println("%v", resultID)
 }
